@@ -1,6 +1,6 @@
 {
   "name": "@soundcut/decode-audio-data-fast",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Decode audio data asynchronously, in the browser using Base​Audio​Context​.decode​Audio​Data(), as fast as possible.",
   "browser": "index.js",
   "scripts": {
