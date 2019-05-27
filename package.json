@@ -1,0 +1,33 @@
+{
+  "name": "@soundcut/decode-audio-data-fast",
+  "version": "1.0.0",
+  "description": "Decode audio data asynchronously, in the browser using Base​Audio​Context​.decode​Audio​Data(), as fast as possible.",
+  "browser": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Timothée 'Tim' Pillard",
+    "email": "tim@tpillard.fr",
+    "url": "https://twitter.com/tpillard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soundcut/decode-audio-data-fast.git"
+  },
+  "bugs": {
+    "url": "https://github.com/soundcut/decode-audio-data-fast/issues"
+  },
+  "keywords": [
+    "decode",
+    "audio",
+    "data",
+    "async",
+    "chunk",
+    "fast"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "mp3-parser": "^0.3.0"
+  }
+}
