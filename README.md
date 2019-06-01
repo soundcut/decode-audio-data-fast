@@ -60,3 +60,10 @@ At the moment, `decode-audio-data-fast` only supports `mp3` files that can be re
 ## Browser support
 
 *FIXME*
+
+This module uses and assumes availability of the following APIs:
+
+- [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await)
+- [decodeAudioData](https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData)
+
+This module has somewhat been tested on Firefox/Chrome, for desktop and mobile, and currently has known issues with Safari.
