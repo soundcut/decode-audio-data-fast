@@ -9,6 +9,30 @@ This package was originally created and is used in [soundcut](https://github.com
 `AudioContext.decodeAudioData()`is *slow* and *does not work for large files*.
 By splitting the source into chunks and decoding these in parallel, `decode-audio-data-fast` works around the native API's limitations.
 
+## Benchmarks 
+
+*FIXME*
+
+Quick tests performed on my own devices (ThinkPad X280 & Pixel 3).
+
+Test file is a 13MB 320kbps CBR MP3 export of https://www.youtube.com/watch?v=BigolJfoANw
+
+### Native
+
+- Firefox Mobile: 13100ms
+- Chrome Mobile: 1500ms
+
+- Firefox Desktop: 3700ms
+- Chrome Desktop: 2100ms
+
+### decode-audio-data-fast
+
+- Firefox Mobile: 7900ms
+- Chrome Mobile: 800ms
+
+- Firefox Desktop: 1700ms
+- Chrome Desktop: 1000ms
+
 ## Usage
 
 ```sh
