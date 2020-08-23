@@ -1393,7 +1393,11 @@ var main = createCommonjsModule(function (module, exports) {
 });
 
 const CHUNK_MAX_SIZE = 1000 * 1000;
-const CONCCURENT_DECODE_WORKERS = 4;
+const DEFAULT_CONCURRENCY = 4;
+const CONCURRENCY =
+  ((typeof navigator !== 'undefined' && navigator.hardwareConcurrency) || 1) > 2
+    ? navigator.hardwareConcurrency
+    : DEFAULT_CONCURRENCY;
 
 /**
  * Creates a new ArrayBuffer out of two Uint8Arrays
@@ -1428,7 +1432,6 @@ function makeSaveChunk(chunkArrayBuffers, tagsUInt8Array, sourceUInt8Array) {
 function emptyChunk(chunk) {
   chunk.byteLength = 0;
   chunk.frames.length = 0;
-  return chunk;
 }
 
 function addChunkFrame(chunk, frame) {
@@ -1439,9 +1442,7 @@ function addChunkFrame(chunk, frame) {
 const asyncWorker = (source, items, fn, output) => async () => {
   let next;
   while ((next = items.pop())) {
-    const idx = source.indexOf(next);
-    const result = await fn(next);
-    output[idx] = result;
+    output[source.get(next)] = await fn(next);
   }
 };
 
@@ -1461,8 +1462,10 @@ function decodeArrayBuffer(audioCtx, arrayBuffer) {
   return new Promise(audioCtx.decodeAudioData.bind(audioCtx, arrayBuffer));
 }
 
-async function getFileAudioBuffer(file, audioCtx) {
+async function getFileAudioBuffer(file, audioCtx, options = {}) {
   /* Copyright (c) 2019, Timothée 'Tim' Pillard, @ziir @tpillard - ISC */
+
+  const { concurrency = CONCURRENCY } = options;
 
   const arrayBuffer = await getArrayBuffer(file);
   const view = new DataView(arrayBuffer);
@@ -1488,7 +1491,7 @@ async function getFileAudioBuffer(file, audioCtx) {
         chunk && chunk.byteLength + frame._section.byteLength >= CHUNK_MAX_SIZE;
       if (chunkEnd) {
         saveChunk(chunk);
-        chunk = emptyChunk(chunk);
+        emptyChunk(chunk);
       }
 
       addChunkFrame(chunk, frame);
@@ -1500,13 +1503,14 @@ async function getFileAudioBuffer(file, audioCtx) {
   }
 
   const workers = [];
-  const source = chunkArrayBuffers;
-  const items = chunkArrayBuffers.slice();
+  const source = new Map(chunkArrayBuffers.map((chunk, idx) => [chunk, idx]));
   const audioBuffers = new Array(chunkArrayBuffers.length);
   const decode = decodeArrayBuffer.bind(null, audioCtx);
 
-  for (let i = 0; i < CONCCURENT_DECODE_WORKERS; i++) {
-    workers.push(asyncWorker(source, items, decode, audioBuffers)());
+  for (let i = 0; i < Math.min(concurrency, source.size); i++) {
+    workers.push(
+      asyncWorker(source, chunkArrayBuffers, decode, audioBuffers)()
+    );
   }
   await Promise.all(workers);
 
@@ -1520,10 +1524,9 @@ async function getFileAudioBuffer(file, audioCtx) {
   );
 
   for (let j = 0; j < numberOfChannels; j++) {
-    const channelData = audioBuffer.getChannelData(j);
     let offset = 0;
     for (let i = 0; i < audioBuffers.length; i++) {
-      channelData.set(audioBuffers[i].getChannelData(j), offset);
+      audioBuffer.copyToChannel(audioBuffers[i].getChannelData(j), j, offset);
       offset += audioBuffers[i].length;
     }
   }
