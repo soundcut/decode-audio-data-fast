@@ -2,8 +2,15 @@
   "name": "@soundcut/decode-audio-data-fast",
   "version": "1.0.1",
   "description": "Decode audio data asynchronously, in the browser using Base​Audio​Context​.decode​Audio​Data(), as fast as possible.",
-  "browser": "index.js",
+  "browser": "dist/decode-audio-data-fast.standalone.umd.js",
+  "module": "dist/decode-audio-data-fast.esm.js",
+  "main": "dist/decode-audio-data-fast.cjs.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "rollup -c",
+    "build:production": "NODE_ENV=production rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": {
@@ -29,5 +36,11 @@
   "license": "ISC",
   "dependencies": {
     "mp3-parser": "^0.3.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "rollup": "^2.26.5",
+    "rollup-plugin-terser": "^7.0.0"
   }
 }
