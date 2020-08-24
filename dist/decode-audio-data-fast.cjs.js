@@ -1,4 +1,12 @@
-const parser = require('mp3-parser');
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var parser = require('mp3-parser');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var parser__default = /*#__PURE__*/_interopDefaultLegacy(parser);
 
 const CHUNK_MAX_SIZE = 1000 * 1000;
 const CONCCURENT_DECODE_WORKERS = 4;
@@ -54,7 +62,7 @@ const asyncWorker = (source, items, fn, output) => async () => {
 };
 
 function getArrayBuffer(file) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     let fileReader = new FileReader();
     fileReader.onloadend = () => {
       resolve(fileReader.result);
@@ -70,11 +78,12 @@ function decodeArrayBuffer(audioCtx, arrayBuffer) {
 }
 
 async function getFileAudioBuffer(file, audioCtx) {
-  /* Copyright (c) 2019, Timothée 'Tim' Pillard, @ziir @tpillard - ISC */ 
+  /* Copyright (c) 2019, Timothée 'Tim' Pillard, @ziir @tpillard - ISC */
+
   const arrayBuffer = await getArrayBuffer(file);
   const view = new DataView(arrayBuffer);
 
-  const tags = parser.readTags(view);
+  const tags = parser__default['default'].readTags(view);
   const firstFrame = tags.pop();
   const uInt8Array = new Uint8Array(arrayBuffer);
   const tagsUInt8Array = uInt8Array.subarray(0, firstFrame._section.offset);
@@ -87,7 +96,7 @@ async function getFileAudioBuffer(file, audioCtx) {
   let chunk = { byteLength: 0, frames: [] };
   let next = firstFrame._section.offset + firstFrame._section.byteLength;
   while (next) {
-    const frame = parser.readFrame(view, next);
+    const frame = parser__default['default'].readFrame(view, next);
     next = frame && frame._section.nextFrameIndex;
 
     if (frame) {
@@ -138,4 +147,4 @@ async function getFileAudioBuffer(file, audioCtx) {
   return audioBuffer;
 }
 
-module.exports = getFileAudioBuffer;
+exports.getFileAudioBuffer = getFileAudioBuffer;
