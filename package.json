@@ -9,9 +9,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "rollup -c",
-    "build:production": "NODE_ENV=production rollup -c",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "rm -rf dist",
+    "build": "npm run clean; rollup -c",
+    "build:production": "npm run clean; NODE_ENV=production rollup -c",
+    "test": "npm run build:production; cd test; npm t"
   },
   "author": {
     "name": "Timothée 'Tim' Pillard",

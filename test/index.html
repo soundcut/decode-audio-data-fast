@@ -2,14 +2,31 @@
 <html>
   <head>
     <script src="../dist/decode-audio-data-fast.standalone.umd.js"></script>
-    <script src="helpers.js"></script>
-    <script src="index.js"></script>
+    <script>
+      if (!self.DADF) {
+        throw new Error('window.DADF from UMD <script> unavailable.');
+      }
+
+      if (typeof self.DADF.getFileAudioBuffer !== 'function') {
+        throw new Error(
+          'window.DADF.getFileAudioBuffer (UMD) function unavailable.'
+        );
+      }
+    </script>
     <script type="module">
       import { getFileAudioBuffer as gFAB } from '../dist/decode-audio-data-fast.standalone.esm.js';
-      self.gFAB = gFAB;
-    </script>
-  </head>
-  <body>
+      if (!gFAB) {
+        throw new Error(
+          'getFileAudioBuffer import from ESM Module unavailable.'
+        );
+      }
 
-  </body>
+      if (typeof gFAB !== 'function') {
+        throw new Error('gFAB (ESM) function unavailable.');
+      }
+    </script>
+    <script src="helpers.js"></script>
+    <script src="index.js"></script>
+  </head>
+  <body></body>
 </html>
