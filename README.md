@@ -77,7 +77,11 @@ See [`./benchmark` directory](benchmark/).
 
 Visit [decodeAudioData / decode-audio-data-fast benchmark page](https://soundcut.github.io/decode-audio-data-fast/benchmark/) (open your browser console, wait a reasonably long time for all the benchmarks to run).
 
+### Benchmark of decodeAudioData vs decode-audio-data-fast in Firefox
+
 <img alt="Benchmark of decodeAudioData vs decode-audio-data-fast in Firefox" src="benchmark/benchmark-decode-audio-data-fast.png" />
+
+### Benchmark of decodeAudioData vs decode-audio-data-fast in Chromium
 
 <img alt="Benchmark of decodeAudioData vs decode-audio-data-fast in Chromium" src="benchmark/benchmark-decode-audio-data-fast-chromium.png" />
 
