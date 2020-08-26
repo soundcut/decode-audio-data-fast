@@ -10,7 +10,7 @@ async function fetchSample(url) {
     const response = await fetchPromise;
     if (response) {
       if (response.status !== 200) {
-        const error = new Error('Unable to fetch slice');
+        const error = new Error('Unable to fetch sample');
         error.response = response;
         throw error;
       }
@@ -35,5 +35,23 @@ function getArrayBuffer(file) {
   });
 }
 
-window.fetchSample = fetchSample;
-window.getArrayBuffer = getArrayBuffer;
+async function test(which, what) {
+  const start = performance.now();
+
+  try {
+    const ret = await what();
+
+    const end = performance.now();
+    const out = { case: which, duration: `${end - start}`, length: ret.length };
+    console.table(out);
+    return out;
+  } catch (_err) {
+    const msg = `Test failed > ${which} > ${_err.message.replace(
+      'Error: ',
+      ''
+    )}`;
+    const err = new Error();
+    err.stack = [msg, ..._err.stack.split('\n').slice(1)].join('\n');
+    throw err;
+  }
+}

@@ -1,14 +1,3 @@
-async function test(which, what) {
-  const start = performance.now();
-
-  const ret = await what();
-
-  const end = performance.now();
-  const out = { case: which, duration: `${end - start}`, length: ret.length };
-  console.table(out);
-  return out;
-}
-
 async function run() {
   const file = await fetchSample('../samples/1.mp3');
 
