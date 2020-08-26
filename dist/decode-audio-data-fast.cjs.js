@@ -151,3 +151,4 @@ async function getFileAudioBuffer(file, audioCtx, options = {}) {
 }
 
 exports.getFileAudioBuffer = getFileAudioBuffer;
+//# sourceMappingURL=decode-audio-data-fast.cjs.js.map

@@ -1545,3 +1545,4 @@
 	Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
+//# sourceMappingURL=decode-audio-data-fast.standalone.umd.js.map

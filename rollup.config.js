@@ -18,11 +18,13 @@ const browserBuild = {
       name: 'DADF',
       file: pkg.browser,
       format: 'umd',
+      sourcemap: true,
     },
     // ESM
     {
       file: pkg.browser.replace('umd', 'esm'),
       format: 'es',
+      sourcemap: true,
     },
   ],
 };
@@ -60,8 +62,8 @@ export default [
     input: 'src/index.js',
     external: ['mp3-parser'],
     output: [
-      { file: pkg.main, format: 'cjs' },
-      { file: pkg.module, format: 'es' },
+      { file: pkg.main, format: 'cjs', sourcemap: true },
+      { file: pkg.module, format: 'es', sourcemap: true },
     ],
   },
 ].filter(Boolean);

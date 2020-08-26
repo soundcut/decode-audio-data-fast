@@ -1535,3 +1535,4 @@ async function getFileAudioBuffer(file, audioCtx, options = {}) {
 }
 
 export { getFileAudioBuffer };
+//# sourceMappingURL=decode-audio-data-fast.standalone.esm.js.map
