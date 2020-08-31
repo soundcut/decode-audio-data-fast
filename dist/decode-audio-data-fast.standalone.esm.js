@@ -1465,9 +1465,19 @@ function decodeArrayBuffer(audioCtx, arrayBuffer) {
 async function getFileAudioBuffer(file, audioCtx, options = {}) {
   /* Copyright (c) 2019, Timothée 'Tim' Pillard, @ziir @tpillard - ISC */
 
-  const { concurrency = CONCURRENCY } = options;
+  const { native = false, concurrency = CONCURRENCY } = options;
 
   const arrayBuffer = await getArrayBuffer(file);
+
+  if (native) {
+    return decodeArrayBuffer(audioCtx, arrayBuffer);
+  }
+
+  const safari = !!window.webkitAudioContext;
+  if (safari) {
+    return getFileAudioBuffer(file, audioCtx, { native: true });
+  }
+
   const view = new DataView(arrayBuffer);
 
   const tags = main.readTags(view);
@@ -1524,9 +1534,10 @@ async function getFileAudioBuffer(file, audioCtx, options = {}) {
   );
 
   for (let j = 0; j < numberOfChannels; j++) {
+    const channelData = audioBuffer.getChannelData(j);
     let offset = 0;
     for (let i = 0; i < audioBuffers.length; i++) {
-      audioBuffer.copyToChannel(audioBuffers[i].getChannelData(j), j, offset);
+      channelData.set(audioBuffers[i].getChannelData(j), offset);
       offset += audioBuffers[i].length;
     }
   }
