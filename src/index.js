@@ -73,9 +73,19 @@ function decodeArrayBuffer(audioCtx, arrayBuffer) {
 async function getFileAudioBuffer(file, audioCtx, options = {}) {
   /* Copyright (c) 2019, Timothée 'Tim' Pillard, @ziir @tpillard - ISC */
 
-  const { concurrency = CONCURRENCY } = options;
+  const { native = false, concurrency = CONCURRENCY } = options;
 
   const arrayBuffer = await getArrayBuffer(file);
+
+  if (native) {
+    return decodeArrayBuffer(audioCtx, arrayBuffer);
+  }
+
+  const safari = !!window.webkitAudioContext;
+  if (safari) {
+    return getFileAudioBuffer(file, audioCtx, { native: true });
+  }
+
   const view = new DataView(arrayBuffer);
 
   const tags = parser.readTags(view);
